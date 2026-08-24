@@ -1,5 +1,8 @@
 name: Update Ciné & Jeux RSS
 
+concurrency:
+  group: rss-update
+  cancel-in-progress: false
 on:
   schedule:
     - cron: "*/15 * * * *"
