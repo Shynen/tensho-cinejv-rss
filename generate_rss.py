@@ -10,6 +10,8 @@ from email.utils import format_datetime
 from pathlib import Path
 from urllib.parse import urljoin
 
+STATE_FILE = Path("discord-state.json")
+
 import requests
 
 
@@ -602,6 +604,58 @@ def add_special_item(
     )
 
 
+
+def entry_to_article(entry):
+    link = entry.get("link", "").strip()
+    return {
+        "title": clean_text(entry.get("title", "Sans titre")),
+        "link": link,
+        "guid": entry.get("id") or entry.get("guid") or link,
+        "description": get_description(entry),
+        "date": get_entry_date(entry),
+    }
+
+
+def load_state():
+    if not STATE_FILE.exists():
+        return {}
+    try:
+        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        print("   ⚠️ État Discord illisible, réinitialisation.")
+        return {}
+
+
+def save_state(state):
+    STATE_FILE.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def update_discord_feed(category, config, article, state):
+    if article is None:
+        print("   ⏭️ Aucun article à publier.")
+        return False
+
+    guid = article["guid"]
+
+    if state.get(category) == guid:
+        print("   ⏭️ Aucun nouvel article depuis le dernier run.")
+        return False
+
+    create_feed(
+        config,
+        [],
+        filename=f"{category}-discord.xml",
+        max_items=1,
+        special_article=article,
+    )
+
+    state[category] = guid
+    print(f"   🔔 Nouveau flux Discord : {article['title']}")
+    return True
+
 def create_feed(
     config,
     entries,
@@ -688,111 +742,65 @@ def create_feed(
 
 
 def main():
-    print(
-        "========================================"
-    )
-    print(
-        "Tensho Ciné & Jeux vidéo RSS"
-    )
-    print(
-        "========================================"
-    )
+    print("========================================")
+    print("Tensho Ciné & Jeux vidéo RSS")
+    print("========================================")
 
+    state = load_state()
+    state_changed = False
     successful = 0
     failed = 0
 
     for category, config in FEEDS.items():
         print()
-        print(
-            f"🔎 Récupération : "
-            f"{config['title']}"
-        )
-
-        print(
-            f"   {config['url']}"
-        )
+        print(f"🔎 Récupération : {config['title']}")
+        print(f"   {config['url']}")
 
         try:
-            feed = fetch_feed(
-                config["url"]
-            )
+            feed = fetch_feed(config["url"])
+            entries = prepare_entries(feed)
 
-            entries = prepare_entries(
-                feed
-            )
+            print(f"   📰 {len(entries)} articles récupérés.")
 
-            print(
-                f"   📰 {len(entries)} "
-                f"articles récupérés."
-            )
-
-            # -------------------------------------------------
-            # Flux normal : toujours basé sur le RSS.
-            # -------------------------------------------------
+            # Flux normal : 10 derniers articles.
             create_feed(
                 config,
                 entries,
                 filename=f"{category}.xml",
-                max_items=MAX_ITEMS
+                max_items=MAX_ITEMS,
             )
 
-            # -------------------------------------------------
-            # Flux Readybot.
-            # -------------------------------------------------
-            if config.get(
-                "special_latest"
-            ) == "allocine":
+            # Flux Discord : seulement lorsqu'un nouvel article apparaît.
+            if config.get("special_latest") == "allocine":
+                article = fetch_allocine_latest(entries)
+            else:
+                article = entry_to_article(entries[0])
 
-                latest_article = (
-                    fetch_allocine_latest(
-                        entries
-                    )
-                )
-
-                create_feed(
+            if config["discord"]:
+                changed = update_discord_feed(
+                    category,
                     config,
-                    entries,
-                    filename=(
-                        f"{category}-discord.xml"
-                    ),
-                    max_items=1,
-                    special_article=latest_article
+                    article,
+                    state,
                 )
-
-            elif config["discord"]:
-
-                create_feed(
-                    config,
-                    entries,
-                    filename=(
-                        f"{category}-discord.xml"
-                    ),
-                    max_items=1
-                )
+                state_changed = state_changed or changed
 
             successful += 1
 
         except Exception as error:
-            print(
-                f"   ❌ Échec : {error}"
-            )
-
+            print(f"   ❌ Échec : {error}")
             failed += 1
 
+    if state_changed:
+        save_state(state)
+        print("   💾 État Discord sauvegardé.")
+    else:
+        print("   ℹ️ Aucun changement Discord.")
+
     print()
-    print(
-        "========================================"
-    )
-
-    print(
-        f"RSS TERMINÉ — "
-        f"{successful} OK / "
-        f"{failed} échec(s)"
-    )
-
-    print(
-        "========================================"
-    )
+    print("========================================")
+    print(f"RSS TERMINÉ — {successful} OK / {failed} échec(s)")
+    print("========================================")
 
 
 if __name__ == "__main__":
