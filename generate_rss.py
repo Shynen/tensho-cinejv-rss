@@ -633,15 +633,25 @@ def save_state(state):
     )
 
 
-def update_discord_feed(category, config, article, state):
+def update_discord_feed(
+    category,
+    config,
+    article,
+    state,
+):
     if article is None:
         print("   ⏭️ Aucun article à publier.")
         return False
 
     guid = article["guid"]
 
-    if state.get(category) == guid:
-        print("   ⏭️ Aucun nouvel article depuis le dernier run.")
+    previous_guid = state.get(category)
+
+    if previous_guid == guid:
+        print(
+            f"   ⏭️ Aucun nouvel article "
+            f"{config['title']} depuis le dernier run."
+        )
         return False
 
     create_feed(
@@ -653,92 +663,13 @@ def update_discord_feed(category, config, article, state):
     )
 
     state[category] = guid
-    print(f"   🔔 Nouveau flux Discord : {article['title']}")
-    return True
-
-def create_feed(
-    config,
-    entries,
-    filename,
-    max_items=MAX_ITEMS,
-    special_article=None
-):
-    rss = ET.Element(
-        "rss",
-        {
-            "version": "2.0"
-        }
-    )
-
-    channel = ET.SubElement(
-        rss,
-        "channel"
-    )
-
-    ET.SubElement(
-        channel,
-        "title"
-    ).text = (
-        f"Actualités - "
-        f"{config['title']}"
-    )
-
-    ET.SubElement(
-        channel,
-        "link"
-    ).text = config["url"]
-
-    ET.SubElement(
-        channel,
-        "description"
-    ).text = (
-        f"Flux RSS "
-        f"{config['title']} - Tensho"
-    )
-
-    if special_article:
-        add_special_item(
-            channel,
-            special_article
-        )
-
-        count = 1
-
-    else:
-        for entry in entries[:max_items]:
-            add_item(
-                channel,
-                entry
-            )
-
-        count = min(
-            len(entries),
-            max_items
-        )
-
-    tree = ET.ElementTree(
-        rss
-    )
-
-    ET.indent(
-        tree,
-        space=" "
-    )
-
-    output = Path(
-        filename
-    )
-
-    tree.write(
-        output,
-        encoding="UTF-8",
-        xml_declaration=True
-    )
 
     print(
-        f"   🟢 {output} généré "
-        f"({count} article(s))."
+        f"   🔔 Nouvel article {config['title']} : "
+        f"{article['title']}"
     )
+
+    return True
 
 
 def main():
