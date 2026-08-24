@@ -22,7 +22,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: python -m pip install feedparser requests
+        run: python -m pip install feedparser requests beautifulsoup4
 
       - name: Generate RSS
         run: python generate_rss.py
