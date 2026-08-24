@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version="2.0">
+ <channel>
+  <title>Actualités - Cinéma</title>
+  <link>https://www.allocine.fr/rss/news-cine.xml</link>
+  <description>Flux RSS Cinéma - Tensho</description>
+  <item>
+   <title>Ce soir sur Netflix : Jason Bateman et Rachel McAdams dans une comédie hilarante (et injustement oubliée) par les scénaristes de Spider-Man: Homecoming</title>
+   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219269.html</link>
+   <guid isPermaLink="false">1000219269</guid>
+   <description>&lt;p&gt;Focus sur "Game Night", comédie déjantée emmenée par Jason Bateman et Rachel McAdams, signée des scénaristes de "Spider-Man: Homecoming". Un film hilarant à vite (re)découvrir sur Netflix !&lt;/p&gt;</description>
+   <pubDate>Mon, 24 Aug 2026 16:00:00 +0000</pubDate>
+  </item>
+ </channel>
+</rss>
