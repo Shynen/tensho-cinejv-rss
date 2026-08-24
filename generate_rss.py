@@ -22,7 +22,7 @@ FEEDS = {
         "latest_page": "https://www.allocine.fr/news/cinema/",
     },
     "jeux-video": {
-        "url": "https://www.jeuxactu.com/rss/ja.rss",
+        "url": "https://www.jeuxvideo.com/rss/rss-news.xml",
         "title": "Jeux vidéo",
         "discord": True,
     },
