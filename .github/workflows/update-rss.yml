@@ -3,6 +3,7 @@ name: Update Ciné & Jeux RSS
 concurrency:
   group: rss-update
   cancel-in-progress: false
+
 on:
   schedule:
     - cron: "*/15 * * * *"
@@ -34,7 +35,16 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add cinema.xml cinema-discord.xml jeux-video.xml jeux-video-discord.xml discord-state.json
-          git diff --cached --quiet || git commit -m "Update cinéma et jeux vidéo RSS"
+
+          if git diff --cached --quiet; then
+            echo "Aucun changement à publier."
+            exit 0
+          fi
+
+          git commit -m "Update cinéma et jeux vidéo RSS"
+
           git pull --rebase origin main
+
           git push
