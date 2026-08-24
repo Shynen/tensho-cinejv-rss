@@ -10,7 +10,6 @@ from email.utils import format_datetime
 from pathlib import Path
 from urllib.parse import urljoin
 
-STATE_FILE = Path("discord-state.json")
 
 import requests
 
@@ -616,52 +615,48 @@ def entry_to_article(entry):
     }
 
 
-def load_state():
-    if not STATE_FILE.exists():
-        return {}
+def read_existing_discord_guid(filename):
+    path = Path(filename)
+
+    if not path.exists():
+        return None
+
     try:
-        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        print("   ⚠️ État Discord illisible, réinitialisation.")
-        return {}
+        root = ET.parse(path).getroot()
+        guid = root.find("./channel/item/guid")
+
+        if guid is not None and guid.text:
+            return guid.text.strip()
+
+    except Exception as error:
+        print(f"   ⚠️ Impossible de lire {filename} : {error}")
+
+    return None
 
 
-def save_state(state):
-    STATE_FILE.write_text(
-        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-
-def update_discord_feed(
-    category,
-    config,
-    article,
-    state,
-):
+def update_discord_feed(category, config, article):
     if article is None:
         print("   ⏭️ Aucun article à publier.")
         return False
 
-    guid = article["guid"]
-    previous_guid = state.get(category)
+    filename = f"{category}-discord.xml"
+    previous_guid = read_existing_discord_guid(filename)
+    current_guid = article["guid"]
 
-    if previous_guid == guid:
+    if previous_guid == current_guid:
         print(
-            f"   ⏭️ Aucun nouvel article "
-            f"{config['title']} depuis le dernier run."
+            f"   ⏭️ Aucun nouvel article {config['title']} "
+            f"depuis le dernier run."
         )
         return False
 
     create_feed(
         config,
         [],
-        filename=f"{category}-discord.xml",
+        filename=filename,
         max_items=1,
         special_article=article,
     )
-
-    state[category] = guid
 
     print(
         f"   🔔 Nouvel article {config['title']} : "
@@ -670,98 +665,12 @@ def update_discord_feed(
 
     return True
 
-def create_feed(
-    config,
-    entries,
-    filename,
-    max_items=MAX_ITEMS,
-    special_article=None
-):
-    rss = ET.Element(
-        "rss",
-        {
-            "version": "2.0"
-        }
-    )
-
-    channel = ET.SubElement(
-        rss,
-        "channel"
-    )
-
-    ET.SubElement(
-        channel,
-        "title"
-    ).text = (
-        f"Actualités - "
-        f"{config['title']}"
-    )
-
-    ET.SubElement(
-        channel,
-        "link"
-    ).text = config["url"]
-
-    ET.SubElement(
-        channel,
-        "description"
-    ).text = (
-        f"Flux RSS "
-        f"{config['title']} - Tensho"
-    )
-
-    if special_article:
-        add_special_item(
-            channel,
-            special_article
-        )
-
-        count = 1
-
-    else:
-        for entry in entries[:max_items]:
-            add_item(
-                channel,
-                entry
-            )
-
-        count = min(
-            len(entries),
-            max_items
-        )
-
-    tree = ET.ElementTree(
-        rss
-    )
-
-    ET.indent(
-        tree,
-        space=" "
-    )
-
-    output = Path(
-        filename
-    )
-
-    tree.write(
-        output,
-        encoding="UTF-8",
-        xml_declaration=True
-    )
-
-    print(
-        f"   🟢 {output} généré "
-        f"({count} article(s))."
-    )
-
 
 def main():
     print("========================================")
     print("Tensho Ciné & Jeux vidéo RSS")
     print("========================================")
 
-    state = load_state()
-    state_changed = False
     successful = 0
     failed = 0
 
@@ -784,32 +693,24 @@ def main():
                 max_items=MAX_ITEMS,
             )
 
-            # Flux Discord : seulement lorsqu'un nouvel article apparaît.
+            # Flux Discord : uniquement si le GUID est nouveau.
             if config.get("special_latest") == "allocine":
                 article = fetch_allocine_latest(entries)
             else:
                 article = entry_to_article(entries[0])
 
             if config["discord"]:
-                changed = update_discord_feed(
+                update_discord_feed(
                     category,
                     config,
                     article,
-                    state,
                 )
-                state_changed = state_changed or changed
 
             successful += 1
 
         except Exception as error:
             print(f"   ❌ Échec : {error}")
             failed += 1
-
-    if state_changed:
-        save_state(state)
-        print("   💾 État Discord sauvegardé.")
-    else:
-        print("   ℹ️ Aucun changement Discord.")
 
     print()
     print("========================================")
