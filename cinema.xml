@@ -5,20 +5,6 @@
   <link>https://www.allocine.fr/rss/news-cine.xml</link>
   <description>Flux RSS Cinéma - Tensho</description>
   <item>
-   <title>Surprise dans les premières images d'Un homme à la mer : cette star qui a fait danser le monde entier joue dans le nouveau film de Gael Garcia Bernal</title>
-   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219649.html</link>
-   <guid isPermaLink="false">1000219649</guid>
-   <description>&lt;p&gt;Attendu dans les festivals de Venise et Toronto, "Un homme à la mer" de Gael Garcia Bernal a dévoilé sa bande-annonce... et révélé la présence de Ricky Martin au casting du long métrage qui n'a pas encore de date de sortie en France.&lt;/p&gt;</description>
-   <pubDate>Tue, 25 Aug 2026 10:50:00 +0000</pubDate>
-  </item>
-  <item>
-   <title>"Quel final !" : noté 4,2 sur 5, c'est le meilleur film fantastique de l'année 2023... Et il conclut une saga culte "avec brio" !</title>
-   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219079.html</link>
-   <guid isPermaLink="false">1000219079</guid>
-   <description>&lt;p&gt;Quel film fantastique de 2023 a été le mieux noté par les spectateurs AlloCiné ? Il s'agit du troisième volet d'une saga à succès !&lt;/p&gt;</description>
-   <pubDate>Tue, 25 Aug 2026 10:15:00 +0000</pubDate>
-  </item>
-  <item>
    <title>Matthew McConaughey : 23 ans plus tard, l’une de ses comédies romantiques les plus populaires va avoir une suite</title>
    <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219645.html</link>
    <guid isPermaLink="false">1000219645</guid>
@@ -73,6 +59,20 @@
    <guid isPermaLink="false">1000219405</guid>
    <description>&lt;p&gt;Renvoyés en plein tournage de “Solo”, Phil Lord et Chris Miller ont laissé derrière eux un film en crise. Appelé à leur succéder, Ron Howard raconte les désaccords, les scènes retournées et les regrets qui entourent encore cette aventure Star Wars.&lt;/p&gt;</description>
    <pubDate>Sun, 23 Aug 2026 17:00:00 +0000</pubDate>
+  </item>
+  <item>
+   <title>Mark Wahlberg ne veut jouer qu'un seul super-héros : "C'est réaliste, plausible et réel"</title>
+   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219401.html</link>
+   <guid isPermaLink="false">1000219401</guid>
+   <description>&lt;p&gt;Mark Wahlberg n’a aucune envie de rejoindre Marvel ou DC. Un seul super-héros l’intéresse : Steve Austin, l’homme bionique de “L’Homme qui valait 3 milliards”, qu’il espère incarner au cinéma depuis plus de dix ans.&lt;/p&gt;</description>
+   <pubDate>Sun, 23 Aug 2026 08:00:00 +0000</pubDate>
+  </item>
+  <item>
+   <title>Steven Seagal : tout le monde l'a oublié mais c'est le seul film d'action où on a vu son personnage mourir !</title>
+   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000219399.html</link>
+   <guid isPermaLink="false">1000219399</guid>
+   <description>&lt;p&gt;Star incontournable du cinéma musclé des années 90, Steven Seagal semblait destiné à occuper le devant de la scène dans “Ultime décision”. Le film réserve pourtant à son personnage un sort aussi brutal qu’inattendu.&lt;/p&gt;</description>
+   <pubDate>Sun, 23 Aug 2026 06:00:00 +0000</pubDate>
   </item>
  </channel>
 </rss>
