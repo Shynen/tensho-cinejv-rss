@@ -5,13 +5,6 @@
   <link>https://www.allocine.fr/rss/news-cine.xml</link>
   <description>Flux RSS Cinéma - Tensho</description>
   <item>
-   <title>Depuis 50 ans, les fans de ce grand classique signé Spielberg sont soufflés par la puissance de cette affiche</title>
-   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000225681.html</link>
-   <guid isPermaLink="false">1000225681</guid>
-   <description>&lt;p&gt;Une affiche de film est extrêmement importante dans le processus de promotion d'une oeuvre. En ce sens, le poster de ce grand classique du cinéma se place parmi les plus mémorables jamais créés.&lt;/p&gt;</description>
-   <pubDate>Sat, 03 Oct 2026 15:00:00 +0000</pubDate>
-  </item>
-  <item>
    <title>"La mort la plus comique du cinéma" : il y a 35 ans, Alain Chabat nous offrait une séquence aussi culte que gênante dans son premier film</title>
    <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000225802.html</link>
    <guid isPermaLink="false">1000225802</guid>
@@ -73,6 +66,13 @@
    <guid isPermaLink="false">1000225255</guid>
    <description>&lt;p&gt;Depuis le 30 septembre, Tom Cruise est Digger dans le film du même nom, satire signée Alejandro Gonzalez Inarritu dans laquelle la star se transforme physiquement. Mais combien de temps a-t-il fallu pour lui donner cette apparence ?&lt;/p&gt;</description>
    <pubDate>Sat, 03 Oct 2026 09:00:00 +0000</pubDate>
+  </item>
+  <item>
+   <title>Il y a 20 ans, Matt Damon a fondé une ONG qui est venue en aide à plus de 92 millions de personnes</title>
+   <link>https://www.allocine.fr/article/fichearticle_gen_carticle=1000225252.html</link>
+   <guid isPermaLink="false">1000225252</guid>
+   <description>&lt;p&gt;Bien avant de multiplier les succès au cinéma, Matt Damon s’est engagé dans un combat qui lui tient particulièrement à cœur, et qui porte ses fruits !&lt;/p&gt;</description>
+   <pubDate>Sat, 03 Oct 2026 08:30:00 +0000</pubDate>
   </item>
  </channel>
 </rss>
